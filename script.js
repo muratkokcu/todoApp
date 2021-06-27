@@ -29,15 +29,16 @@ function addToDo(todoItem) {
     if (todoItem) {
         inputValue = todoItem.content;
     }
-
-    if (todoItem == undefined) {
-        updateLS()
-        console.log(todoItem)
-    }
+    const id = new Date().getTime().toString();
 
     if (inputValue) {
 
         const newTodo = document.createElement('li');
+
+        // add data-id
+        const attr = document.createAttribute('data-id');
+        attr.value = id;
+        newTodo.setAttributeNode(attr);
 
         if (todoItem && todoItem.completed == true) {
             newTodo.classList.add('completed');
@@ -92,7 +93,6 @@ function updateLS() {
 
     todosLi.forEach((li) => {
         todosArr.push({
-            id: li.number,
             content: li.innerText,
             completed: li.classList.contains('completed')
         })

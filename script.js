@@ -5,17 +5,15 @@ const allBtn = document.getElementById('allBtn');
 const completedBtn = document.getElementById('completedBtn');
 const activeBtn = document.getElementById('activeBtn');
 
-getFromLS();
 
-function getFromLS() {
-    const getTodos = JSON.parse(localStorage.getItem('todos'));
+const getTodos = JSON.parse(localStorage.getItem('todos'));
 
-    if (getTodos) {
-        getTodos.forEach((todoItem) => {
-            addToDo(todoItem);
-        });
-    }
+if (getTodos) {
+    getTodos.forEach((todoItem) => {
+        addToDo(todoItem);
+    });
 }
+
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -29,38 +27,41 @@ function addToDo(todoItem) {
     if (todoItem) {
         inputValue = todoItem.content;
     }
-    const id = new Date().getTime().toString();
+    const id = new Date().getTime().toString(); // cheating with numbers
 
     if (inputValue) {
 
         const newTodo = document.createElement('li');
 
-        // add data-id
-        const attr = document.createAttribute('data-id');
-        attr.value = id;
-        newTodo.setAttributeNode(attr);
-
         if (todoItem && todoItem.completed == true) {
             newTodo.classList.add('completed');
         }
 
-        // Display actives in UI
+        // Show active tasks in UI
         activeBtn.addEventListener('click', () => {
-
-            if (todoItem.completed) {
-                newTodo.classList.add('hidden');
-            } else {
-                newTodo.classList.remove('hidden');
-            }
+            getTodos.forEach(() => {
+                if (newTodo.classList.contains('completed')) {
+                    newTodo.classList.add('hidden')
+                } else if (!newTodo.classList.contains('completed')) {
+                    newTodo.classList.remove('hidden');
+                }
+            });
         })
 
-        // Display completed in UI
+        // Show completed tasks in UI
         completedBtn.addEventListener('click', () => {
-            if (todoItem.completed == false) {
-                newTodo.classList.add('hidden');
-            } else {
-                newTodo.classList.remove('hidden');
-            }
+            getTodos.forEach(() => {
+                if (newTodo.classList.contains('completed')) {
+                    newTodo.classList.remove('hidden')
+                } else if (!newTodo.classList.contains('completed')) {
+                    newTodo.classList.add('hidden');
+                }
+            });
+        })
+
+        // Show all tasks in UI
+        allBtn.addEventListener('click', () => {
+            newTodo.classList.remove('hidden');
         })
 
         newTodo.innerHTML = inputValue;
